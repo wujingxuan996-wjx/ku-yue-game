@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>最苦與最樂 - 預習闖關</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #f0f2f5; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        button { display: block; width: 80%; margin: 10px auto; padding: 15px; font-size: 16px; cursor: pointer; border: 2px solid #007bff; background: white; border-radius: 5px; transition: all 0.3s; }
+        button:hover { background: #007bff; color: white; }
+        .hidden { display: none; }
+        .correct { background: #28a745; color: white; border-color: #28a745; }
+        .wrong { background: #dc3545; color: white; border-color: #dc3545; }
+        input[type="text"] { width: 50%; padding: 10px; font-size: 16px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="game">
+    <h1>🎮 最苦與最樂：預習闖關</h1>
+    <div id="stage1">
+        <h2>第一關：何謂最苦？</h2>
+        <p>梁啟超認為人生最苦的事是什麼？</p >
+        <button onclick="checkAnswer(1, 'A')">A. 貧窮</button>
+        <button onclick="checkAnswer(1, 'B')">B. 失意</button>
+        <button onclick="checkAnswer(1, 'C')">C. 老、病、死</button>
+        <button onclick="checkAnswer(1, 'D')">D. 身上背著未了的責任</button>
+    </div>
+
+    <div id="stage2" class="hidden">
+        <h2>第二關：苦盡甘來的成語</h2>
+        <p>請填寫文中形容責任完成後心情的兩個詞：</p >
+        <p>1. <input type="text" id="idiom1" placeholder="如...重..."></p >
+        <p>2. <input type="text" id="idiom2" placeholder="心上一塊石頭..."></p >
+        <button onclick="checkIdioms()">提交答案</button>
+    </div>
+
+    <div id="stage3" class="hidden">
+        <h2>第三關：思辨挑戰</h2>
+        <p>孟子說「君子有終身之憂」，梁啟超認為這其實是：</p >
+        <button onclick="checkAnswer(3, 'A')">A. 真正的苦難</button>
+        <button onclick="checkAnswer(3, 'B')">B. 苦中真樂</button>
+        <button onclick="checkAnswer(3, 'C')">C. 毫無意義</button>
+    </div>
+
+    <div id="result" class="hidden">
+        <h2 id="resultText"></h2>
+        <p id="resultDesc"></p >
+        <button onclick="location.reload()">重新挑戰</button>
+    </div>
+</div>
+
+<script>
+    function checkAnswer(stage, choice) {
+        let isCorrect = false;
+        let correctBtn = null;
+
+        if (stage === 1 && choice === 'D') isCorrect = true;
+        if (stage === 3 && choice === 'B') isCorrect = true;
+
+        // 視覺反饋
+        event.target.classList.add(isCorrect ? 'correct' : 'wrong');
+        
+        setTimeout(() => {
+            if (isCorrect) {
+                document.getElementById(`stage${stage}`).classList.add('hidden');
+                if(stage < 3) {
+                    document.getElementById(`stage${stage+1}`).classList.remove('hidden');
+                } else {
+                    showResult(true);
+                }
+            } else {
+                alert("再想想看！這不是梁啟超強調的重點喔。");
+                event.target.classList.remove('wrong');
+            }
+        }, 1000);
+    }
+
+    function checkIdioms() {
+        const ans1 = document.getElementById('idiom1').value.trim();
+        const ans2 = document.getElementById('idiom2').value.trim();
+        // 簡單判斷，允許部分錯字或簡稱
+        if ((ans1.includes('釋') && ans1.includes('重')) && 
+            (ans2.includes('石頭') || ans2.includes('落地'))) {
+            document.getElementById('stage2').classList.add('hidden');
+            document.getElementById('stage3').classList.remove('hidden');
+        } else {
+            alert("好像不太對喔！回頭看看課文第三段。");
+        }
+    }
+
+    function showResult(success) {
+        document.getElementById('stage3').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+        if(success) {
+            document.getElementById('resultText').innerText = "🎉 恭喜過關！";
+            document.getElementById('resultDesc').innerText = "你已經掌握了梁啟超的核心思想：盡責任是最大的快樂。準備好上課了嗎？";
+        }
+    }
+</script>
+
+</body>
+</html>
